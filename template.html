@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Crop Recommendation</title>
+    <link rel="icon" type="image/jpg" href="crop.jpg">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f0f8ff;
+        }
+        form { 
+            margin: 20px auto; 
+            width: 300px; 
+            background: #ffffff; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, select, button { 
+            margin: 10px 0; 
+            padding: 10px; 
+            width: 90%; 
+            border: 1px solid #ccc; 
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50; 
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        h1 {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌾 AI Crop Recommendation System 🌾</h1>
+    <form action="/predict" method="post">
+        <label for="N">Nitrogen:</label>
+        <input type="text" name="N" placeholder="Nitrogen (N)" required>
+
+        <label for="P">Phosphorus:</label>
+        <input type="text" name="P" placeholder="Phosphorus (P)" required>
+
+        <label for="K">Potassium:</label>
+        <input type="text" name="K" placeholder="Potassium (K)" required>
+
+        <label for="temperature">Temperature:</label>
+        <input type="text" name="temperature" placeholder="Temperature (°C)" required>
+
+        <label for="humidity">Humidity:</label>
+        <input type="text" name="humidity" placeholder="Humidity (%)" required>
+
+        <label for="ph">pH Value:</label>
+        <input type="text" name="ph" placeholder="Soil pH" required>
+
+        <label for="rainfall">Rainfall:</label>
+        <input type="text" name="rainfall" placeholder="Rainfall (mm)" required>
+
+        <label for="state">Select State:</label>
+        <select name="state" required>
+            <option value="" disabled selected>Select State</option>
+            {% for state in states %}
+                <option value="{{ state }}">{{ state }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Predict Crop</button>
+    </form>
+
+    {% if prediction_text %}
+        <h2>{{ prediction_text }}</h2>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🌱 Smart Farming Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f8f9fa; }
+    h2 { color: #2b9348; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; text-align: center; border: 1px solid #ccc; }
+    th { background: #40916c; color: white; }
+    tr:nth-child(even) { background-color: #d8f3dc; }
+    canvas { margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+  <h2>🌿 Smart Farming Dashboard</h2>
+
+  <table>
+    <tr>
+      <th>Timestamp</th>
+      <th>Soil Moisture</th>
+      <th>Temperature (°C)</th>
+      <th>🚿 Pump Status</th>
+    </tr>
+    {% for r in records %}
+    <tr>
+      <td>{{ r.time_stamp }}</td>
+      <td>{{ r.moisture }}</td>
+      <td>{{ r.temperature }}</td>
+      <td class="status-{{ r.pump_status | lower }}">{{ r.pump_status }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <!-- Temperature Chart -->
+  <canvas id="tempChart" width="400" height="200"></canvas>
+  <!-- Moisture Chart -->
+  <canvas id="moistureChart" width="400" height="200"></canvas>
+
+  <script>
+    const records = {{ records | tojson }};
+    const labels = records.map(r => r.time_stamp);
+    const temperatures = records.map(r => r.temperature);
+    const moistures = records.map(r => r.moisture);
+  
+    // Temperature Chart
+    new Chart(document.getElementById('tempChart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Temperature (°C)',
+          data: temperatures,
+          borderColor: 'rgb(255, 99, 132)',
+          fill: false,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Temperature Over Time'
+          }
+        },
+        scales: {
+          x: { display: true, title: { display: true, text: 'Timestamp' } },
+          y: { display: true, title: { display: true, text: '°C' } }
+        }
+      }
+    });
+  
+    // Moisture Chart
+    new Chart(document.getElementById('moistureChart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Soil Moisture',
+          data: moistures,
+          borderColor: 'rgb(54, 162, 235)',
+          fill: false,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Soil Moisture Over Time'
+          }
+        },
+        scales: {
+          x: { display: true, title: { display: true, text: 'Timestamp' } },
+          y: { display: true, title: { display: true, text: 'Moisture Level' } }
+        }
+      }
+    });
+  </script>
+  
+</body>
+</html>
